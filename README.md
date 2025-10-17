@@ -169,3 +169,7 @@ python rag_chat.py \
 - 使用 FAISS `IndexFlatIP` + L2 归一化实现余弦相似度。
 - 索引持久化文件：`index.faiss`、`meta.jsonl`、`kb.json`。
 - 可通过 `--include` 指定自定义匹配模式，例如：`**/*.md **/*.pdf`。
+
+### License
+
+本项目采用 MIT 开源许可协议，详见仓库根目录的 `LICENSE` 文件。
