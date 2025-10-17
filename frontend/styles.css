@@ -1,0 +1,146 @@
+:root {
+  --bg: #0b1020;
+  --card: #121932;
+  --muted: #a9b2c7;
+  --text: #e6ecff;
+  --accent: #4f8cff;
+  --accent-2: #5eead4;
+  --danger: #ef4444;
+  --border: #24304e;
+}
+body.light {
+  --bg: #f6f8ff;
+  --card: #ffffff;
+  --muted: #4b5563;
+  --text: #0b1020;
+  --accent: #2563eb;
+  --accent-2: #14b8a6;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(1200px 600px at 10% -10%, #1a2448 0%, transparent 60%),
+              radial-gradient(800px 500px at 90% 0%, #132a4a 0%, transparent 60%),
+              var(--bg);
+  color: var(--text);
+}
+body.light { background: var(--bg); }
+
+.container { max-width: 1080px; margin: 0 auto; padding: 32px 20px 60px; }
+.header { margin-bottom: 18px; }
+.title { font-size: 24px; font-weight: 700; letter-spacing: 0.2px; }
+.subtitle { color: var(--muted); margin-top: 6px; font-size: 14px; }
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 14px 0 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+h2 { margin: 6px 0 14px; font-size: 18px; }
+h3 { margin: 10px 0 10px; font-size: 15px; color: var(--muted); font-weight: 600; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; align-items: stretch; --panel-height: 720px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field span { font-size: 12px; color: var(--muted); }
+.field input, .field select {
+  background: #0e1530;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,140,255,0.2); }
+
+.actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+button {
+  appearance: none;
+  background: linear-gradient(180deg, #3a67ff, #2e5be6);
+  border: 0;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .05s ease, box-shadow .2s ease;
+  box-shadow: 0 6px 20px rgba(79,140,255,0.35);
+}
+button:hover { transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button.danger { background: linear-gradient(180deg, #f05, #d03); box-shadow: 0 6px 20px rgba(239,68,68,0.3); }
+
+.divider { border-top: 1px dashed var(--border); margin: 14px 0; }
+
+.output {
+  background: #0e1530;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--muted);
+  max-height: 220px;
+  overflow: auto;
+}
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+.list .item {
+  background: #0e1530;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+.item .meta { color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+.item .text { white-space: pre-wrap; line-height: 1.6; }
+
+.answer {
+  background: #0e1530;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 120px;
+  white-space: pre-line;
+  line-height: 1.7;
+}
+
+.footer { margin-top: 24px; color: var(--muted); font-size: 12px; text-align: center; }
+
+.two-col > div { display: flex; flex-direction: column; gap: 10px; min-height: 0; height: var(--panel-height); }
+
+/* Constrain panels to avoid page stretching and align bottoms */
+#results { height: 100%; overflow: auto; }
+#answer, #history { flex: 1 1 0; min-height: 0; overflow: auto; }
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; --panel-height: 60vh; }
+  #results { height: var(--panel-height); }
+}
+
+/* Light theme contrast fixes */
+body.light .field input,
+body.light .field select {
+  background: #ffffff;
+  color: #0b1020;
+  border-color: #d1d5db;
+}
+body.light .field input::placeholder,
+body.light .field select::placeholder { color: #6b7280; }
+body.light .output,
+body.light .list .item,
+body.light .answer {
+  background: #ffffff;
+  color: #0b1020;
+  border-color: #e5e7eb;
+}
+
+

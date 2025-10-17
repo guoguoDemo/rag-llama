@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地知识库 & RAG 助手</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="title" data-i18n="title">本地知识库 & RAG 助手</div>
+      <div class="subtitle" data-i18n="subtitle">基于 Ollama + FAISS，私有、快速、易用</div>
+    </header>
+
+    <section class="card">
+      <h2 data-i18n="general">通用设置</h2>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="ollama">Ollama 地址</span>
+          <input id="ollamaHost" type="text" placeholder="http://127.0.0.1:11434">
+        </label>
+        <label class="field">
+          <span data-i18n="index_dir">索引目录 index_dir</span>
+          <input id="indexDir" type="text" placeholder="/Users/kele/Desktop/ollama/embeddedModel/kb">
+        </label>
+      </div>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="embed_model">Embedding 模型</span>
+          <select id="embedModel">
+            <option>nomic-embed-text:latest</option>
+            <option>all-minilm:latest</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="chat_model">聊天模型</span>
+          <select id="chatModel">
+            <option>llama3.2:latest</option>
+            <option>llama3.1:8b-instruct</option>
+            <option>qwen2.5:7b-instruct</option>
+            <option>deepseek-r1:1.5b</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="btnSaveCfg" data-i18n="save_cfg">保存配置</button>
+        <button id="btnManageKb" data-i18n="manage_kb">管理知识库列表</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="kb_ops">构建/维护知识库</h2>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="input_path">从目录索引 input_path</span>
+          <input id="inputPath" type="text" placeholder="/Users/kele/Desktop/ollama/embeddedModel/sample_docs">
+        </label>
+        <label class="field">
+          <span data-i18n="include">包含模式（空格分隔）</span>
+          <input id="include" type="text" value="**/*.txt **/*.md **/*.pdf **/*.docx **/*.html **/*.htm">
+        </label>
+      </div>
+      <div class="grid">
+        <label class="field">
+          <span>chunk_size</span>
+          <input id="chunkSize" type="number" value="800">
+        </label>
+        <label class="field">
+          <span>chunk_overlap</span>
+          <input id="chunkOverlap" type="number" value="200">
+        </label>
+      </div>
+      <div class="actions">
+        <button id="btnIndex" data-i18n="reindex">重新构建索引</button>
+        <button id="btnAppend" data-i18n="append">追加目录文档</button>
+        <button id="btnClear" class="danger" data-i18n="clear">清空索引</button>
+      </div>
+      <div class="divider"></div>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="upload">上传文件（自动索引到 index_dir）</span>
+          <input id="fileInput" type="file" multiple>
+        </label>
+        <div class="actions">
+          <button id="btnUpload" data-i18n="upload_btn">上传并索引</button>
+        </div>
+      </div>
+      <div id="uploadProgress" class="output" style="display:none"></div>
+      <div class="divider"></div>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="urls">追加网页 URLs（用空格分隔）</span>
+          <input id="urls" type="text" placeholder="https://example.com https://example.org">
+        </label>
+        <div class="actions">
+          <button id="btnIngestUrl" data-i18n="ingest">采集并追加</button>
+        </div>
+      </div>
+      <pre id="kbOutput" class="output" aria-live="polite"></pre>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="qa_rag">查询与 RAG 对话</h2>
+      <div class="grid">
+        <label class="field">
+          <span data-i18n="question_label">问题 / Query</span>
+          <input id="question" type="text" placeholder="这个项目是做什么的？">
+        </label>
+        <label class="field">
+          <span>Top K</span>
+          <input id="topK" type="number" value="5">
+        </label>
+      </div>
+      <div class="actions">
+        <button id="btnQuery" data-i18n="only_search">仅检索（查看片段）</button>
+        <button id="btnChat" data-i18n="rag_answer">RAG 对话（生成回答）</button>
+        <button id="btnChatStream" data-i18n="stream_answer">流式回答</button>
+        <button id="btnExport" data-i18n="export">导出结果</button>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 data-i18n="results">检索结果</h3>
+          <div id="results" class="list"></div>
+        </div>
+        <div>
+          <h3 data-i18n="chat_answer">聊天回答 <small id="streamHint" style="color:#a9b2c7"></small></h3>
+          <div id="answer" class="answer"></div>
+          <h3 data-i18n="history">对话历史</h3>
+          <div id="history" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span data-i18n="footer">本地运行 · 数据不出本机 · 使用 FastAPI 提供服务</span>
+      <span style="float:right">
+        <button id="btnTheme" data-i18n="toggle_theme">切换主题</button>
+        <button id="btnI18n" data-i18n="toggle_lang">中/EN</button>
+      </span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+<!-- 简易前端，无构建依赖，可直接通过 uvicorn 静态托管 -->
+</html>
+
+

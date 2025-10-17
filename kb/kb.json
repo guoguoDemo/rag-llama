@@ -1,0 +1,6 @@
+{
+  "model": "nomic-embed-text:latest",
+  "dimension": 768,
+  "index_type": "IndexFlatIP",
+  "version": 1
+}
